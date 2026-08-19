@@ -36,7 +36,7 @@ def fixed_point(g_function, x0, tolerance, max_iter, error_type="absolute"):
 
     iterations = []
 
-    current = x0
+    current = float(x0)
 
     for i in range(1, max_iter + 1):
 
@@ -45,7 +45,14 @@ def fixed_point(g_function, x0, tolerance, max_iter, error_type="absolute"):
         # Detect divergence (NaN, Inf, or blowing up)
         if not np.isfinite(next_x) or abs(next_x) > 1e15:
             raise ValueError(
-                "Method is diverging. Try a different g(x) or initial guess."
+                f"🎢 This is spiraling away, not settling down! After "
+                f"{i} step(s) the value shot off toward infinity "
+                f"instead of converging.\n\n"
+                "Fixed Point Iteration only works when |g'(x)| < 1 "
+                "near the root — otherwise every step amplifies the "
+                "error instead of shrinking it. Try algebraically "
+                "rearranging your equation into a gentler g(x), or "
+                "start from a different initial guess."
             )
 
         if error_type == "absolute":

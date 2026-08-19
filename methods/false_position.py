@@ -71,13 +71,17 @@ def false_position(
     if f(a) * f(b) >= 0:
         raise ValueError(
             f"""
-Invalid Interval!
+🤔 Hmm, no sign change here!
 
-f(a) = {f(a):.6f}
-f(b) = {f(b):.6f}
+f({a}) = {f(a):.6f}
+f({b}) = {f(b):.6f}
 
-Choose another interval where
-f(a) and f(b) have opposite signs.
+False Position needs f(a) and f(b) to have
+opposite signs (one positive, one negative) —
+that's how it knows a root is trapped between them.
+
+Try widening the interval, or flip over to
+"Any Root" mode and let the app hunt for one 🔍
 """
         )
 

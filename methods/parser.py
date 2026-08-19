@@ -49,9 +49,12 @@ def parse_function(function_str, local_dict):
         )
     except Exception:
         raise ValueError(
-            f"Could not understand the function: '{function_str}'. "
-            "Use standard math notation, e.g. x^3-3x^2+2x-1, "
-            "sin(x)-x/2, or e^x-3."
+            f"🧩 Couldn't quite parse '{function_str}' — the math "
+            "notation tripped me up somewhere.\n\n"
+            "A few things that usually help: use ^ or ** for powers "
+            "(x^3 or x**3), write function names with parentheses "
+            "(sin(x), not sinx), and make sure brackets are balanced. "
+            "Example that works: x^3-3x^2+2x-1"
         )
 
     # Catch cases like 'sinx' (no parentheses/space) which silently
@@ -60,10 +63,14 @@ def parse_function(function_str, local_dict):
     stray = expr.free_symbols - allowed_symbols
 
     if stray:
+        stray_list = ", ".join(sorted(f"'{s}'" for s in map(str, stray)))
         raise ValueError(
-            f"Unexpected symbol(s) {sorted(str(s) for s in stray)} in "
-            f"'{function_str}'. Did you forget parentheses around a "
-            "function, e.g. 'sin(x)' instead of 'sinx'?"
+            f"🕵️ Found some mystery letter(s) I don't recognize: "
+            f"{stray_list} in '{function_str}'.\n\n"
+            "This usually happens when a function name is missing its "
+            "parentheses — e.g. 'sinx' gets read as separate letters "
+            "instead of the function sin(x). Try 'sin(x)' instead, "
+            "and the same goes for cos, tan, exp, log, sqrt, etc."
         )
 
     return expr

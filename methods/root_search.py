@@ -44,7 +44,10 @@ def find_bracket(f, search_min=-50, search_max=50, steps=4000):
             return float(xs[i]), float(xs[i + 1])
 
     raise ValueError(
-        f"No root found by scanning [{search_min}, {search_max}]. "
-        "Try widening the search range or use 'Root Between' with "
-        "a specific interval."
+        f"🔭 Scanned all the way from {search_min} to {search_max} and "
+        "couldn't spot a single sign change — so no obvious root out "
+        "here. Either it's hiding outside this range, or the function "
+        "might not cross zero at all in the reals.\n\n"
+        "Try widening the search range, or switch to 'Root Between' "
+        "if you already know roughly where the root should be."
     )

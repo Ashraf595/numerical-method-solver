@@ -4,6 +4,7 @@ from methods.bisection import bisection
 from methods.false_position import false_position
 from methods.newton import newton_raphson
 from methods.fixed import fixed_point
+from methods.narrate import narrate_bracketing, narrate_newton, narrate_fixed_point
 
 # -----------------------------------------------------
 # Page Configuration
@@ -134,6 +135,11 @@ max_iter = st.sidebar.number_input(
     step=1
 )
 
+show_work = st.sidebar.checkbox(
+    "Show step-by-step work",
+    value=True
+)
+
 solve = st.sidebar.button("🚀 Solve")
 
 # -----------------------------------------------------
@@ -202,6 +208,38 @@ if solve:
 
         st.success("✅ Solution Found Successfully")
 
+        st.markdown(
+            f"**Approximate root of the equation is `{root:.4f}` "
+            f"(after {len(table)} iterations)**"
+        )
+
+        # ---------------- Manual Step-by-Step Work ----------------
+
+        if show_work:
+
+            st.subheader("✍️ Solution")
+
+            st.markdown(f"Here **f(x) = {function}**")
+            st.markdown("---")
+
+            if method in ["Bisection Method", "False Position Method"]:
+                label = "Bisection" if method == "Bisection Method" else "False Position"
+                blocks = narrate_bracketing(function, table, method_label=label)
+
+            elif method == "Newton-Raphson Method":
+                blocks = narrate_newton(function, table)
+
+            else:
+                blocks = narrate_fixed_point(function, table)
+
+            for block in blocks:
+                st.markdown(block)
+                st.markdown("")
+
+            st.markdown("---")
+
+        # ---------------- Results Summary ----------------
+
         col1, col2, col3, col4 = st.columns(4)
 
         with col1:
@@ -235,9 +273,19 @@ if solve:
             use_container_width=True
         )
 
+    except ValueError as e:
+
+        # Our own errors already carry their own friendly tone
+        st.error(str(e))
+
     except Exception as e:
 
-        st.error(f"❌ {e}")
+        st.error(
+            f"😵 Well, that's unexpected! Something went sideways "
+            f"that I wasn't quite ready for:\n\n`{e}`\n\n"
+            "Double-check your inputs, or try a simpler function "
+            "to narrow down what's going on."
+        )
 
 # -----------------------------------------------------
 # Footer

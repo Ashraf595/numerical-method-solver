@@ -40,7 +40,7 @@ def newton_raphson(function, x0, tolerance, max_iter, error_type="absolute"):
 
     iterations = []
 
-    current = x0
+    current = float(x0)
 
     for i in range(1, max_iter + 1):
 
@@ -50,7 +50,10 @@ def newton_raphson(function, x0, tolerance, max_iter, error_type="absolute"):
         # Prevent division by zero
         if abs(dfx) < 1e-12:
             raise ValueError(
-                "Derivative is zero. Choose another initial guess."
+                f"⚡ Flat tangent line at x = {current:.4f}! "
+                "f'(x) is basically zero there, so Newton-Raphson has "
+                "nothing to divide by and gets stuck. Try a different "
+                "initial guess a bit further from this spot."
             )
 
         next_x = current - (fx / dfx)
@@ -58,7 +61,11 @@ def newton_raphson(function, x0, tolerance, max_iter, error_type="absolute"):
         # Detect divergence (NaN, Inf, or blowing up)
         if not np.isfinite(next_x) or abs(next_x) > 1e15:
             raise ValueError(
-                "Method is diverging. Try a different initial guess."
+                "🚀 Whoa, this is flying off to infinity! Newton-Raphson "
+                "is diverging instead of converging — usually a sign "
+                "the initial guess is too far from the actual root, or "
+                "landed somewhere with a wild tangent line. Try a "
+                "guess closer to where you expect the root to be."
             )
 
         if error_type == "absolute":
